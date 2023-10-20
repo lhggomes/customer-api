@@ -1,0 +1,16 @@
+version: '3'
+volumes:
+  data:
+services:
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: acB17IGHaX
+      MYSQL_DATABASE: customer_application
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: acB17IGHaX
+    volumes:
+      - data:/var/lib/mysql
+    ports:
+      - "3219:3306"
+    restart: unless-stopped
