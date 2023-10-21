@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BusinessCustomerTest {
 
     @Test
-    @DisplayName("Test class NoArgs constructor")
+    @DisplayName("Test class toString() from Builder")
     public void testToStringFromBuilder(){
 
         BusinessCustomer.BusinessCustomerBuilder customer = new BusinessCustomer.BusinessCustomerBuilder();
@@ -21,6 +21,7 @@ public class BusinessCustomerTest {
     public void testClassConstructor(){
 
         BusinessCustomer customer = new BusinessCustomer();
+        customer.setId(1L);
         assertInstanceOf(BusinessCustomer.class, customer);
     }
 

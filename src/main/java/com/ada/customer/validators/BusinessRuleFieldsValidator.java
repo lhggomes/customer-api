@@ -2,6 +2,7 @@ package com.ada.customer.validators;
 
 import com.ada.customer.dto.BusinessCustomerDto;
 import com.ada.customer.dto.PersonCustomerDto;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 
 import javax.validation.ConstraintViolation;
@@ -10,6 +11,7 @@ import javax.validation.Validator;
 import java.util.HashMap;
 import java.util.Set;
 
+@NoArgsConstructor
 public class BusinessRuleFieldsValidator {
 
     public static <T> HashMap<String, String> validateBusinessCustomerDto(T customer) {
