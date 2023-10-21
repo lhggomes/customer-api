@@ -18,7 +18,7 @@ public class BusinessCustomerDtoTest {
 
     @Test
     @DisplayName("Test Hashcode method")
-    public void testHashcode(){
+    public void testHashcode_Equals(){
 
         BusinessCustomerDto businessCustomerDtoA = new BusinessCustomerDto();
         BusinessCustomerDto businessCustomerDtoB = new BusinessCustomerDto();
