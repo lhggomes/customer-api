@@ -1,39 +1,48 @@
-package com.ada.customer.entity;
+package com.ada.customer.dto;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Data
 @Builder
-@Entity
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class BusinessCustomer {
+public class BusinessCustomerDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+
     @NotBlank
+    @NotNull
+    @NotEmpty
     private String cnpj;
+
     @NotBlank
+    @NotEmpty
     @Size(max = 50)
+    @NotNull
     private String razaoSocial;
-    @NotBlank
+
     @Size(max = 4)
+    @NotBlank
+    @NotEmpty
+    @NotNull
     private String mcc;
+
     @NotBlank
+    @NotEmpty
+    @NotNull
     private String businessContactCpf;
+
     @NotBlank
+    @NotNull
+    @NotEmpty
     private String businessContactName;
+
     @NotBlank
-    @Email
+    @NotEmpty
+    @NotNull
     private String businessEmailName;
 
 }
