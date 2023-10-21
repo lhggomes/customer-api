@@ -1,5 +1,6 @@
 package com.ada.customer.dto;
 
+import com.ada.customer.annotation.CnpjCpf;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class BusinessCustomerDto {
     @NotBlank
     @NotNull
     @NotEmpty
+    @CnpjCpf
     @Size(min = 14, max = 14)
     private String cnpj;
 
@@ -31,6 +33,7 @@ public class BusinessCustomerDto {
     @NotBlank
     @NotEmpty
     @NotNull
+    @CnpjCpf
     @Size(min = 11, max = 11)
     private String businessContactCpf;
 

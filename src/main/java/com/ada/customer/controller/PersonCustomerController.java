@@ -1,11 +1,14 @@
 package com.ada.customer.controller;
 
 import com.ada.customer.dto.BusinessCustomerDto;
+import com.ada.customer.dto.PersonCustomerDto;
 import com.ada.customer.entity.BusinessCustomer;
+import com.ada.customer.entity.PersonCustomer;
 import com.ada.customer.exceptions.ClientAlreadyExists;
 import com.ada.customer.exceptions.ClientDoesNotExist;
 import com.ada.customer.mapper.BusinessCustomerMapper;
-import com.ada.customer.services.interfaces.BusinessCustomerService;
+import com.ada.customer.mapper.PersonCustomerMapper;
+import com.ada.customer.services.interfaces.PersonCustomerService;
 import com.ada.customer.validators.BusinessRuleFieldsValidator;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,24 +23,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Tag(name = "Business Customer Management", description = "Endpoints for managing business customers")
+@Tag(name = "Customer Management", description = "Endpoints for managing customers")
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin
 @Slf4j
 @Validated
-@RequestMapping(value = "/api/v1/business-customer")
-public class BusinessCustomerController {
+@RequestMapping(value = "/api/v1/customer")
+public class PersonCustomerController {
 
-    private final BusinessCustomerService businessCustomerService;
-
+    private final PersonCustomerService personCustomerService;
     @GetMapping("/{id}")
     public ResponseEntity getById(@PathVariable Long id) {
 
         log.info("PROCESSING GET CUSTOMER: {}", id);
-        Optional<BusinessCustomer> customer = businessCustomerService.getCustomer(id);
+        Optional<PersonCustomer> customer = personCustomerService.getCustomer(id);
         if (customer.isPresent()) {
-            BusinessCustomerDto customerDto = BusinessCustomerMapper.toBusinessCustomerDto(customer.get());
+            PersonCustomerDto customerDto = PersonCustomerMapper.toPersonCustomerDto(customer.get());
             return new ResponseEntity<>(customerDto, HttpStatus.OK);
         }
         return new ResponseEntity<>(new HashMap<>(Map.of("response", "Nenhum cliente foi encontrado com este id")),
@@ -48,20 +50,20 @@ public class BusinessCustomerController {
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
 
         log.info("PROCESSING DELETE CUSTOMER: {}", id);
-        businessCustomerService.deleteCustomer(id);
+        personCustomerService.deleteCustomer(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HashMap<String, String>> update(@PathVariable Long id, @RequestBody @Valid BusinessCustomerDto customerDto) {
+    public ResponseEntity<HashMap<String, String>> update(@PathVariable Long id, @RequestBody @Valid PersonCustomerDto personCustomerDto) {
 
-        log.info("PROCESSING UPDATE CUSTOMER: {} - {}", id, customerDto);
-        HashMap<String, String> validateResult = BusinessRuleFieldsValidator.validateBusinessCustomerDto(customerDto);
+        log.info("PROCESSING UPDATE CUSTOMER: {} - {}", id, personCustomerDto);
+        HashMap<String, String> validateResult = BusinessRuleFieldsValidator.validateBusinessCustomerDto(personCustomerDto);
         if (validateResult.isEmpty()) {
 
             try {
-                BusinessCustomer customer = BusinessCustomerMapper.toBusinessCustomer(customerDto);
-                businessCustomerService.updateCustomer(id, customer);
+                PersonCustomer customer = PersonCustomerMapper.toPersonCustomer(personCustomerDto);
+                personCustomerService.updateCustomer(id, customer);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (ClientDoesNotExist cde) {
                 log.error("CLIENT WITH ID: {} DOES NOT EXIST TO UPDATE", id);
@@ -74,23 +76,24 @@ public class BusinessCustomerController {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid BusinessCustomerDto customerDto) {
+    public ResponseEntity create(@RequestBody @Valid PersonCustomerDto personCustomer) {
 
-        log.info("PROCESSING CREATE CUSTOMER:  {}", customerDto);
-        HashMap<String, String> validateResult = BusinessRuleFieldsValidator.validateBusinessCustomerDto(customerDto);
+        log.info("PROCESSING CREATE CUSTOMER:  {}", personCustomer);
+        HashMap<String, String> validateResult = BusinessRuleFieldsValidator.validateBusinessCustomerDto(personCustomer);
         if (validateResult.isEmpty()) {
             try {
-                BusinessCustomer customer = BusinessCustomerMapper.toBusinessCustomer(customerDto);
-                Long idCustomerCreated = businessCustomerService.save(customer);
+                PersonCustomer customer = PersonCustomerMapper.toPersonCustomer(personCustomer);
+                Long idCustomerCreated = personCustomerService.save(customer);
                 return new ResponseEntity<>(idCustomerCreated, HttpStatus.CREATED);
             } catch (ClientAlreadyExists ce) {
-                log.error("CLIENT WITH CNPJ: {} ALREADY EXISTS", customerDto.getCnpj());
+                log.error("CLIENT WITH CPF: {} ALREADY EXISTS", personCustomer.getCpf());
                 return new ResponseEntity<>(new HashMap<>(Map.of("response",
-                        "Um Cliente com este mesmo CNPJ já existe: CNPJ: " + customerDto.getCnpj())), HttpStatus.BAD_REQUEST);
+                        "Um Cliente com este mesmo CPF já existe: " + personCustomer.getCpf())), HttpStatus.BAD_REQUEST);
             }
 
         }
         return new ResponseEntity<>(validateResult, HttpStatus.BAD_REQUEST);
     }
+
 
 }

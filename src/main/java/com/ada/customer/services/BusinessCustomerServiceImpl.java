@@ -33,8 +33,8 @@ public class BusinessCustomerServiceImpl implements BusinessCustomerService {
 
     @Override
     public Long save(BusinessCustomer businessCustomer) throws ClientAlreadyExists {
-        log.trace("PROCESSING SAVE BUSINESS CUSTOMER SERVICE");
 
+        log.trace("PROCESSING SAVE BUSINESS CUSTOMER SERVICE");
         BusinessCustomer existCustomer = businessCustomerRepository.findByCnpj(businessCustomer.getCnpj());
         if (existCustomer != null){
             throw new ClientAlreadyExists(String.valueOf(existCustomer.getId()));
@@ -51,7 +51,6 @@ public class BusinessCustomerServiceImpl implements BusinessCustomerService {
         if (foundCustomer.isPresent()){
 
             BusinessCustomer customerToUpdate = foundCustomer.get();
-
             customerToUpdate.setMcc(businessCustomer.getMcc());
             customerToUpdate.setCnpj(businessCustomer.getCnpj());
             customerToUpdate.setBusinessContactCpf(businessCustomer.getBusinessContactCpf());

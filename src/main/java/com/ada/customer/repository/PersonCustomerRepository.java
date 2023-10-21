@@ -4,4 +4,6 @@ import com.ada.customer.entity.PersonCustomer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PersonCustomerRepository extends JpaRepository<PersonCustomer, Long> {
+
+    PersonCustomer findByCpf(String cpf);
 }
