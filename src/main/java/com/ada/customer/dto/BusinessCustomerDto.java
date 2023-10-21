@@ -1,15 +1,15 @@
 package com.ada.customer.dto;
 
 import com.ada.customer.annotation.CnpjCpf;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
 @Data
 @Builder
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BusinessCustomerDto {
 
 
