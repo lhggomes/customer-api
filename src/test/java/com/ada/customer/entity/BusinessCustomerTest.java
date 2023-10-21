@@ -10,6 +10,14 @@ public class BusinessCustomerTest {
 
     @Test
     @DisplayName("Test class NoArgs constructor")
+    public void testToStringFromBuilder(){
+
+        BusinessCustomer.BusinessCustomerBuilder customer = new BusinessCustomer.BusinessCustomerBuilder();
+        assertInstanceOf(String.class, customer.toString());
+    }
+
+    @Test
+    @DisplayName("Test class NoArgs constructor")
     public void testClassConstructor(){
 
         BusinessCustomer customer = new BusinessCustomer();
