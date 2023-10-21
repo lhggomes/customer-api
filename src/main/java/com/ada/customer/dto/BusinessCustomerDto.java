@@ -3,11 +3,13 @@ package com.ada.customer.dto;
 import com.ada.customer.annotation.CnpjCpf;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import javax.validation.constraints.*;
 
 @Data
 @Builder
+@Getter
 public class BusinessCustomerDto {
 
 
