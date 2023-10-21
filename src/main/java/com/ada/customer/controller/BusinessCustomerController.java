@@ -4,6 +4,7 @@ import com.ada.customer.dto.BusinessCustomerDto;
 import com.ada.customer.entity.BusinessCustomer;
 import com.ada.customer.mapper.BusinessCustomerMapper;
 import com.ada.customer.services.interfaces.BusinessCustomerService;
+import com.ada.customer.validators.BusinessRuleFieldsValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class BusinessCustomerController {
     private final BusinessCustomerService businessCustomerService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id) {
+    public ResponseEntity  getById(@PathVariable Long id) {
 
         log.info("PROCESSING GET CUSTOMER: {}", id);
         Optional<BusinessCustomer> customer = businessCustomerService.getCustomer(id);
@@ -48,21 +49,33 @@ public class BusinessCustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Integer> update(@PathVariable Long id, @RequestBody @Valid BusinessCustomerDto customerDto) {
+    public ResponseEntity<HashMap<String, String>> update(@PathVariable Long id, @RequestBody @Valid BusinessCustomerDto customerDto) {
 
         log.info("PROCESSING UPDATE CUSTOMER: {} - {}", id, customerDto);
-        BusinessCustomer customer = BusinessCustomerMapper.toBusinessCustomer(customerDto);
-        businessCustomerService.updateCustomer(id, customer);
-        return new ResponseEntity<>(HttpStatus.OK);
+        HashMap<String, String> validateResult = BusinessRuleFieldsValidator.validateBusinessCustomerDto(customerDto);
+        if (validateResult.isEmpty()){
+
+            BusinessCustomer customer = BusinessCustomerMapper.toBusinessCustomer(customerDto);
+            businessCustomerService.updateCustomer(id, customer);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        }
+        return new ResponseEntity<>(validateResult, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping
-    public ResponseEntity<Long> create(@RequestBody @Valid BusinessCustomerDto customerDto) {
+    public ResponseEntity create(@RequestBody @Valid BusinessCustomerDto customerDto) {
 
         log.info("PROCESSING CREATE CUSTOMER:  {}", customerDto);
-        BusinessCustomer customer = BusinessCustomerMapper.toBusinessCustomer(customerDto);
-        Long idCustomerCreated = businessCustomerService.save(customer);
-        return new ResponseEntity<>(idCustomerCreated, HttpStatus.CREATED);
+        HashMap<String, String> validateResult = BusinessRuleFieldsValidator.validateBusinessCustomerDto(customerDto);
+        if (validateResult.isEmpty()){
+
+            BusinessCustomer customer = BusinessCustomerMapper.toBusinessCustomer(customerDto);
+            Long idCustomerCreated = businessCustomerService.save(customer);
+            return new ResponseEntity<>(idCustomerCreated, HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(validateResult, HttpStatus.BAD_REQUEST);
     }
 
 }

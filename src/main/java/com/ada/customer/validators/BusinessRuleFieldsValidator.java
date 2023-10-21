@@ -9,10 +9,11 @@ import javax.validation.Validator;
 import java.util.HashMap;
 import java.util.Set;
 
-public class BusinessValidator {
+public class BusinessRuleFieldsValidator {
 
     public static HashMap<String, String> validateBusinessCustomerDto(BusinessCustomerDto businessCustomer){
 
+        HashMap<String, String> errors = new HashMap<>();
         Validator validator = Validation.byDefaultProvider()
                 .configure()
                 .messageInterpolator(new ParameterMessageInterpolator())
@@ -22,13 +23,14 @@ public class BusinessValidator {
         Set<ConstraintViolation<BusinessCustomerDto>> violations = validator.validate(businessCustomer);
 
         if(!violations.isEmpty()){
-
             violations.forEach(violation -> {
-                System.out.println(violation);
-            });
+                errors.put(violation.getPropertyPath().toString(), violation.getMessage());
 
+            });
         }
 
+
+        return errors;
     }
 
 }
